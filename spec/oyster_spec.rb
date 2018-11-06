@@ -4,6 +4,7 @@ describe Oystercard do
 
   let(:min) {Oystercard::MINIMUM_BALANCE}
   let(:max) {Oystercard::MAXIMUM_BALANCE}
+  let(:station) { double("station") }
 
   describe '#top_up' do
     it 'should be able to be topped up with an amount' do
@@ -17,20 +18,26 @@ describe Oystercard do
     end
   end
 
-  describe 'touch_in' do
+  describe 'touch_in(station)' do
 
     it 'should be able to touch in and start journey' do
       subject.top_up(5)
-      subject.touch_in
+      subject.touch_in(station)
       expect(subject.journey).to eq true
     end
-
+  
     context 'when balance is below minimum balance' do
       it 'should not start journey' do
         error = Oystercard::MIN_ERROR
         subject.top_up(min - 0.1)
-        expect { subject.touch_in }.to raise_error(RuntimeError, error)
+        expect { subject.touch_in(station) }.to raise_error(RuntimeError, error)
       end
+    end
+
+    it 'should remember entry station' do
+      subject.top_up(5)
+      subject.touch_in(station)
+      expect(subject.entry_station).to eq(station)
     end
 
   end
@@ -39,14 +46,14 @@ describe Oystercard do
 
     it 'should be able to touch out and stop journey' do
       subject.top_up(5)
-      subject.touch_in
+      subject.touch_in(station)
       subject.touch_out
       expect(subject.journey).to eq false
     end
 
     it 'should deduct minimum fare from balance' do
       subject.top_up(5)
-      subject.touch_in
+      subject.touch_in(station)
       
       expect { subject.touch_out}.to change { subject.balance}.from(5).to(4)
     end
@@ -56,7 +63,7 @@ describe Oystercard do
   describe 'in_journey?' do
     before(:each) do
       subject.top_up(5)
-      subject.touch_in
+      subject.touch_in(station)
     end
         context 'tapped in' do
             it 'journey should be reported as true' do
