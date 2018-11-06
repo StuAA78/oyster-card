@@ -23,7 +23,7 @@ describe Oystercard do
     it 'should be able to touch in and start journey' do
       subject.top_up(5)
       subject.touch_in(station)
-      expect(subject.journey).to eq true
+      expect(subject.in_journey?).to eq true
     end
   
     context 'when balance is below minimum balance' do
@@ -48,7 +48,7 @@ describe Oystercard do
       subject.top_up(5)
       subject.touch_in(station)
       subject.touch_out
-      expect(subject.journey).to eq false
+      expect(subject.in_journey?).to eq false
     end
 
     it 'should deduct minimum fare from balance' do
