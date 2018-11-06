@@ -7,6 +7,7 @@ class Oystercard
   MIN_ERROR = "Cannot travel as balance is below minimum of £#{MINIMUM_BALANCE}".freeze
   MAXIMUM_BALANCE = 90
   MAX_ERROR = "Cannot top up over maximum balance of £#{MAXIMUM_BALANCE}".freeze
+  MINIMUM_FARE = 1
 
   def initialize(balance = DEFAULT_BALANCE)
     @balance = balance
@@ -20,6 +21,7 @@ class Oystercard
   end
 
   def touch_out
+    deduct(MINIMUM_FARE)
     @journey = false
   end
 
@@ -32,7 +34,9 @@ class Oystercard
 
     @balance += amount
   end
-
+  
+  private
+  
   def deduct(amount)
     @balance -= amount
   end

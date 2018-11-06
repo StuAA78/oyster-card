@@ -17,15 +17,6 @@ describe Oystercard do
     end
   end
 
-  describe '#deduct' do
-
-    it 'should be able to deduct an amount from the balance' do
-      subject.top_up(20)
-      expect(subject.deduct(5)).to eq 15
-    end
-
-  end
-
   describe 'touch_in' do
 
     it 'should be able to touch in and start journey' do
@@ -51,6 +42,13 @@ describe Oystercard do
       subject.touch_in
       subject.touch_out
       expect(subject.journey).to eq false
+    end
+
+    it 'should deduct minimum fare from balance' do
+      subject.top_up(5)
+      subject.touch_in
+      
+      expect { subject.touch_out}.to change { subject.balance}.from(5).to(4)
     end
 
   end
