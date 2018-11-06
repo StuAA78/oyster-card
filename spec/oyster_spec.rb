@@ -13,4 +13,14 @@ describe Oystercard do
       expect { subject.top_up(max + 5) }.to raise_error(RuntimeError, error)
     end
   end
+  
+  context '#deduct' do
+    
+    it 'should be able to deduct an amount from the balance' do
+      subject.top_up(20)
+      expect(subject.deduct(5)).to eq 15
+    end
+
+  end
+
 end
