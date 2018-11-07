@@ -1,10 +1,9 @@
 require 'oyster'
 
 describe Oystercard do
-
-  let(:min) {Oystercard::MINIMUM_BALANCE}
-  let(:max) {Oystercard::MAXIMUM_BALANCE}
-  let(:station) { double("station") }
+  let(:min) { Oystercard::MINIMUM_BALANCE }
+  let(:max) { Oystercard::MAXIMUM_BALANCE }
+  let(:station) { double('station') }
 
   describe '#top_up' do
     it 'should be able to be topped up with an amount' do
@@ -19,13 +18,12 @@ describe Oystercard do
   end
 
   describe 'touch_in(station)' do
-
     it 'should be able to touch in and start journey' do
       subject.top_up(5)
       subject.touch_in(station)
       expect(subject.in_journey?).to eq true
     end
-  
+
     context 'when balance is below minimum balance' do
       it 'should not start journey' do
         error = Oystercard::MIN_ERROR
@@ -39,11 +37,9 @@ describe Oystercard do
       subject.touch_in(station)
       expect(subject.entry_station).to eq(station)
     end
-
   end
 
   describe 'touch_out' do
-
     it 'should be able to touch out and stop journey' do
       subject.top_up(5)
       subject.touch_in(station)
@@ -54,8 +50,8 @@ describe Oystercard do
     it 'should deduct minimum fare from balance' do
       subject.top_up(5)
       subject.touch_in(station)
-      
-      expect { subject.touch_out}.to change { subject.balance}.from(5).to(4)
+
+      expect { subject.touch_out }.to change { subject.balance }.from(5).to(4)
     end
 
     it 'should set entry station to nil' do
@@ -64,7 +60,6 @@ describe Oystercard do
       subject.touch_out
       expect(subject.entry_station).to eq nil
     end
-
   end
 
   describe 'in_journey?' do
@@ -72,20 +67,18 @@ describe Oystercard do
       subject.top_up(5)
       subject.touch_in(station)
     end
-        context 'tapped in' do
-            it 'journey should be reported as true' do
-                expect(subject.in_journey?).to eq true
-            end
-        end
 
-        context 'tapped out' do
-            it 'journey should be reported as false' do
-                subject.touch_out
-                expect(subject.in_journey?).to eq false
-            end
-        end
+    context 'tapped in' do
+      it 'journey should be reported as true' do
+        expect(subject.in_journey?).to eq true
+      end
+    end
+
+    context 'tapped out' do
+      it 'journey should be reported as false' do
+        subject.touch_out
+        expect(subject.in_journey?).to eq false
+      end
+    end
   end
-
-
-
 end

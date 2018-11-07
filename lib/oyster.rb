@@ -1,4 +1,3 @@
-
 class Oystercard
   attr_reader :balance, :entry_station
 
@@ -15,6 +14,7 @@ class Oystercard
 
   def touch_in(station)
     raise MIN_ERROR if @balance < MINIMUM_BALANCE
+
     @entry_station = station
   end
 
@@ -32,7 +32,7 @@ class Oystercard
 
     @balance += amount
   end
-  
+
   private
 
   def deduct(amount)
